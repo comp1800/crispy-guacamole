@@ -1,18 +1,11 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+#-----------------------------------------------------------
+# These are the files that I do not want include in my repo
+#-----------------------------------------------------------
 
-# Other files and folders
-.settings/
+# Some hidden file created by mac computer
+.DS_Store
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+# The file that contains my own firebase API key
+# Everyone on the team can maintain their own local file with key
+firebase_api_carly.js
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
