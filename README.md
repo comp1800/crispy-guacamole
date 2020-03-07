@@ -1,13 +1,13 @@
 # crispy-guacamole
 #
-# Misc Lecture Lab Demos 
+# Misc Lecture/Lab Demos 
 
 ### @author  Carly Orr
 ### @version  1.0
 
 This repo contains a collection of miscellaneous functions 
-from our lecture or from lab of the Projects One course comp1800
-(typically based on student questions).
+from the Projects One course comp1800
+(mostly based on student questions).
 
 The files are: 
 * misc_demo_2020.html  (current semester examples)
