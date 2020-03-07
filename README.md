@@ -1,6 +1,6 @@
 # crispy-guacamole
 #
-# Misc Lecture Demos
+# Misc Lecture Lab Demos 
 
 ### @author  Carly Orr
 ### @version  1.0
@@ -21,7 +21,7 @@ To try these examples out yourself:
      Comment out the functions you are not using;
      Only call the ones you are trying out.
   
-  Comments and feedback are welcome carly_wong_orr @ bcit.ca
+Comments and feedback are welcome:  carly_wong_orr @ bcit.ca
     
 
 
