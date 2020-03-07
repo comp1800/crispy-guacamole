@@ -10,8 +10,8 @@ from our lecture or from lab of the Projects One course comp1800
 (typically based on student questions).
 
 The files are: 
-* misc_demo_2020.js  (current semester examples)
-* misc_demo_old.js  (some older examples)
+* misc_demo_2020.html  (current semester examples)
+* misc_demo_old.html  (some older examples)
 
 To try these examples out yourself:
 
