@@ -5,8 +5,13 @@
 ### @author  Carly Orr
 ### @version  1.0
 
-The file misc_demo.html contains a collection of miscellaneous functions 
-from our lecture or from lab (typically based on student questions).
+This repo contains a collection of miscellaneous functions 
+from our lecture or from lab of the Projects One course comp1800
+(typically based on student questions).
+
+The files are: 
+* misc_demo_2020.js  (current semester examples)
+* misc_demo_old.js  (some older examples)
 
 To try these examples out yourself:
 
