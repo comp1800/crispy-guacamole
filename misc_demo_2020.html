@@ -113,9 +113,10 @@
                     });
             });
         }
+
         function findByCode(postalcode) {
             var dmin = 0;
-            if (postalcode == 123) {       //let's hardcode location of 123
+            if (postalcode == 123) { //let's hardcode location of 123
                 var x1 = 15;
                 var y1 = 10;
             }
@@ -125,15 +126,57 @@
                     var y2 = doc.data().y;
                     var d = calcDistance(x1, y1, x2, y2);
                     if (d < dmin) break;
-                    else dmin = d; 
+                    else dmin = d;
                 })
             });
         }
-        function calcDistance(x1,y1,x2,y2){
-            return 10;   // use pythagoras thm to cacluate distance between 2 points
+
+        function calcDistance(x1, y1, x2, y2) {
+            return 10; // use pythagoras thm to cacluate distance between 2 points
         }
 
+        //-----------------------------------------------------------------
+        // Scenario:  I have a collection of users; each user has a list of timestamps
+        // Task:  display this list for the user
+        //-----------------------------------------------------------------
+        function showTimes() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users").doc(user.uid)
+                    .get().then(function (snap) {
+                        var list = snap.data().times;
+                        list.forEach(function (x) {
+                            console.log(x);
+                        })
+                    });
+            });
+        }
+        showTimes();
 
+        //-----------------------------------------------------------------
+        // Scenario:  I have a collection of users. Each user has a collection of courses.
+        //              Each course has collection of assignments.
+        //              Each assignment has collection of tasks.
+        // Task:  I want to add to the task collection
+        //-----------------------------------------------------------------
+        function addTask(){
+            var course = "1510";
+            var assignment = "lab03";
+            taskobj = {
+                "description":  "code snowman",
+                "estimate": "20 min"
+            }
+            firebase.auth().onAuthStateChanged(function (user) {
+                    db.collection("users").doc(user.uid)
+                    .collection("courses")
+                    .doc(course)                     //1510
+                    .collection("assignments")
+                    .doc(assignment)                 //lab03
+                    .collection("tasks")
+                    .add({
+                        taskobj
+                    })
+                })
+        }
     </script>
 
 </body>
