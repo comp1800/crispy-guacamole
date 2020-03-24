@@ -76,9 +76,8 @@
                 console.log(data);
                 firebase.auth().onAuthStateChanged(function (user) {
                     db.collection("users").doc(user.uid).update({
-                        "weight": weight
+                        "weight": data
                     });
-
                 })
             })
         }
@@ -127,8 +126,8 @@
                     var d = calcDistance(x1, y1, x2, y2);
                     if (d < dmin) {
                         dmin = d;
+                        localStorage.setItem("closest", doc.data().name); //name of the closest gym
                     }
-                    localStorage.setItem("closest", doc.data().name); //name of the closest gym
                 });
             });
             var closest = localStorage.getItem("closest"); //get closest
@@ -171,7 +170,8 @@
                 "estimate": "20 min"
             }
             firebase.auth().onAuthStateChanged(function (user) {
-                db.collection("users").doc(user.uid)
+                db.collection("users")
+                    .doc(user.uid)
                     .collection("courses")
                     .doc(course) //1510
                     .collection("assignments")
@@ -183,6 +183,34 @@
             })
         }
         //addTask();
+
+        //--------------------------------------------------------------
+        // Scenario:  we have a collection of recipes (with a name)
+        // Task:  we want to get one specific recipe (by name, let's say)
+        //--------------------------------------------------------------
+        function grabRecipeByName(name){
+            db.collection("recipes").where("name","==", name)
+            .get()       //gets ALL the recipes that match variable name
+            .then(function(snap){
+                snap.forEach(function(doc){
+                    console.log(doc.data());   //shows the whole recipe object, inlcuding all key value pairs
+                })
+            })
+        }
+        function grabRecipeByIngredient(ingredient){   
+            db.collection("recipes").where(ingredient,"==", true)
+            .get()    //gets ALL the recipes that match variable ingredient
+            .then(function(snap){
+                snap.forEach(function(doc){
+                    console.log(doc.data());   //shows the whole recipe object, inlcuding all key value pairs
+                })
+            })
+        }
+        grabRecipeByName("mac-and-cheese");
+        grabRecipeByIngredient("chicken");
+
+
+
     </script>
 
 </body>
