@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Carly Misc Demo</title>
+    <meta name="comp1800 boilerplate code" content="my bcit project">
+    <meta name="author" content="BCIT">
+
+    <!----------------------------------------------->
+    <!--  Meta tag for rendering on mobile devices -->
+    <!----------------------------------------------->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!----------------------------------------------->
+    <!-- CSS: Bootstrap, Firebase, other API -->
+    <!----------------------------------------------->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!------------------------>
+    <!-- Your own CSS files -->
+    <!------------------------>
+
+</head>
+
+<body>
+    <!----------------------->
+    <!--  HTML Section -->
+    <!----------------------->
+
+    <h1>Hello, world!</h1>
+    <h1>Welcome to <span id="name"> Elmo's </span>> Awesome App!</h1>
+    <form id="myform">
+        <input type="text" id="weight">
+        <input type="submit">
+    </form>
+
+    <!----------------------------------------------->
+    <!-- JS: Boostrap, Firebase, API related    -->
+    <!----------------------------------------------->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.2/firebase-firestore.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <script src="firebase_api_carly.js"> </script>
+
+    <!--------------------------------------------------------------------->
+    <!-- JS files: Your own JavaScript functions included here    -->
+    <!--------------------------------------------------------------------->
+    <!-- <script src="scripts/script.js"></script> -->
+
+    <!--------------------------------------------------------------------->
+    <!-- Make calls to your own JavaScript functions, here below-->
+    <!---------------------------------------------------------------------->
+
+    <script>
+        //------------------------------------------------------------------------
+        // Scenario:  I have a form that gets a number from the user
+        // Task: I want to write that number into /users/lkjfad2135/  document. 
+        //------------------------------------------------------------------------
+        function saveWeight() {
+            document.getElementById("myform").addEventListener("submit", function (e) {
+                e.preventDefault();
+                var data = document.getElementById("weight").value //get weight from DOM
+                console.log(data);
+                firebase.auth().onAuthStateChanged(function (user) {
+                    db.collection("users").doc(user.uid).update({
+                        "weight": weight
+                    });
+
+                })
+            })
+        }
+
+        //-------------------------------------------------------------------------
+        // Scenario: I have a users collection.  Each document has a experience field.
+        // Task: I want to increment that value by 10
+        //-------------------------------------------------------------------------
+        function updateExperience() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                var incByTen = firebase.firestore.FieldValue.increment(10);
+                var dbref = db.collection("users/").doc(user.uid);
+                dbref.update({
+                    experience: incByTen
+                })
+            });
+        }
+        //updateExperience();
+
+        //------------------------------------------------------------------------
+        // Scenario:  I have a collection of gyms
+        // Task:  I want to find the closest gym to my location
+        //------------------------------------------------------------------------
+        function findGym() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users").doc(user.uid)
+                    .get()
+                    .then(function (snap) {
+                        console.log(snap.data()); //print whole doc object
+                        var postalcode = snap.data().postalcode;
+                        findByCode(postalcode);
+                    });
+            });
+        }
+        function findByCode(postalcode) {
+            var dmin = 0;
+            if (postalcode == 123) {       //let's hardcode location of 123
+                var x1 = 15;
+                var y1 = 10;
+            }
+            db.collection("gyms").get().then(function (snap) {
+                snap.forEach(function (doc) {
+                    var x2 = doc.data().x;
+                    var y2 = doc.data().y;
+                    var d = calcDistance(x1, y1, x2, y2);
+                    if (d < dmin) break;
+                    else dmin = d; 
+                })
+            });
+        }
+        function calcDistance(x1,y1,x2,y2){
+            return 10;   // use pythagoras thm to cacluate distance between 2 points
+        }
+
+
+    </script>
+
+</body>
+
+</html>
