@@ -108,8 +108,8 @@
                     .get()
                     .then(function (snap) {
                         console.log(snap.data()); //print whole doc object
-                        var postalcode = snap.data().postalcode;
-                        findByCode(postalcode);
+                        var postalcode = snap.data().postalcode; //get postalcode
+                        findByCode(postalcode); //find gyms closest to this postalcode
                     });
             });
         }
@@ -121,14 +121,19 @@
                 var y1 = 10;
             }
             db.collection("gyms").get().then(function (snap) {
-                snap.forEach(function (doc) {
-                    var x2 = doc.data().x;
+                snap.forEach(function (doc) { //cycle thru collection of all gyms
+                    var x2 = doc.data().x; //get location of a gym
                     var y2 = doc.data().y;
                     var d = calcDistance(x1, y1, x2, y2);
-                    if (d < dmin) break;
-                    else dmin = d;
-                })
+                    if (d < dmin) {
+                        dmin = d;
+                    }
+                    localStorage.setItem("closest", doc.data().name); //name of the closest gym
+                });
             });
+            var closest = localStorage.getItem("closest"); //get closest
+            console.log(closest);
+            //displayGym(closest);
         }
 
         function calcDistance(x1, y1, x2, y2) {
@@ -158,25 +163,26 @@
         //              Each assignment has collection of tasks.
         // Task:  I want to add to the task collection
         //-----------------------------------------------------------------
-        function addTask(){
+        function addTask() {
             var course = "1510";
             var assignment = "lab03";
             taskobj = {
-                "description":  "code snowman",
+                "description": "code snowman",
                 "estimate": "20 min"
             }
             firebase.auth().onAuthStateChanged(function (user) {
-                    db.collection("users").doc(user.uid)
+                db.collection("users").doc(user.uid)
                     .collection("courses")
-                    .doc(course)                     //1510
+                    .doc(course) //1510
                     .collection("assignments")
-                    .doc(assignment)                 //lab03
+                    .doc(assignment) //lab03
                     .collection("tasks")
                     .add({
                         taskobj
                     })
-                })
+            })
         }
+        //addTask();
     </script>
 
 </body>
