@@ -73,7 +73,7 @@
             firebase.auth().onAuthStateChanged(function (user) {
                 name = user.displayName;
                 console.log(name);
-                document.getElementById("name").innerHTML = name+"\'s"; //Elmo's
+                document.getElementById("name").innerHTML = name + "\'s"; //Elmo's
             })
         }
         sayHello();
@@ -209,7 +209,7 @@
                 .then(function (snap) {
                     snap.forEach(function (doc) {
                         console.log(doc
-                    .data()); //shows the whole recipe object, inlcuding all key value pairs
+                            .data()); //shows the whole recipe object, inlcuding all key value pairs
                     })
                 })
         }
@@ -220,12 +220,57 @@
                 .then(function (snap) {
                     snap.forEach(function (doc) {
                         console.log(doc
-                    .data()); //shows the whole recipe object, inlcuding all key value pairs
+                            .data()); //shows the whole recipe object, inlcuding all key value pairs
                     })
                 })
         }
         //grabRecipeByName("mac-and-cheese");
         //grabRecipeByIngredient("chicken");
+
+        //-----------------------------------------------------------------
+        // Scenario: I have a collection of users, with Totals for different exercises
+        // Task:  I want to increment each of the exercise values
+        // Note the "FieldValue.increment" function does not work with map data structure.
+        // Instead, we read, increment, and write again. 
+        //---------------------------------------------------------------- 
+        function writeMapOld() {
+            var randomCalories=123;
+            firebase.auth().onAuthStateChanged(function (user) {
+                let increment = firebase.firestore.FieldValue.increment(randomCalories);
+                let dbref = db.collection("users/").doc(user.uid);
+                dbref.update({
+                    // MyCalories: increment,
+                    // // ["Total"]: {
+                    // //     benchpress: increment,
+                    // //     calories: increment,
+                    // //     deadlift: increment,
+                    // //     overheadpress: increment,
+                    // //     running: increment,
+                    // //     squat: increment
+                    // // }
+                })
+            })
+        }
+        function writeMap() {
+            var inc=123;
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users/").doc(user.uid)
+                .get()              //read from database
+                .then(function(snap){
+                    var obj = snap.data();   //increment fields
+                    obj.Total.benchpress = obj.Total.benchpress + inc;
+                    obj.Total.calories = obj.Total.calories + inc;
+                    obj.Total.deadlift = obj.Total.deadlift + inc;
+                    saveObj(obj);  //write to database
+                })
+            })
+        }
+        function saveObj(obj){
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users/").doc(user.uid).update(obj);
+            })
+        }
+        //writeMap();
     </script>
 
 </body>
