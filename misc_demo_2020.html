@@ -25,16 +25,49 @@
 </head>
 
 <body>
-    <!----------------------->
-    <!--  HTML Section -->
-    <!----------------------->
+    <!--------------------->
+    <!---  HTML Section --->
+    <!--------------------->
 
     <h1>Hello, world!</h1>
-    <h1>Welcome to <span id="name"> Elmo's </span> Awesome Little App!</h1>
+    <h1>Welcome to <span id="name"> Elmo's </span> Little App!</h1>
+
+    <!--- User Input Example: Form that collects some typed input -->
+    <!--- In this form, we are using a "submit" input -->
     <form id="myform">
         <input type="text" id="weight">
         <input type="submit">
     </form>
+    <p></p>
+    <p> You typed: <span id="demo0"> </span> </p>
+
+    <!--- User Input Example: Two dropdown select menus --->
+    <!--- In this form, we are using a "button" to submit -->
+    <form id="mydropdown">
+        <br>
+        <br>
+        Select your favorite fruit:
+        <select id="fruits">
+            <option value="Apple">Apple</option>
+            <option value="Orange">Orange</option>
+        </select>
+        <br>
+        <br>
+        Select your favorite veg:
+        <select id="vegies"">
+            <option value=" Lettuce">Lettuce</option>
+            <option value="Zucinni">Zucinni</option>
+        </select>
+        <br>
+        <br>
+    </form>
+
+    <p>Click the button to return the value of the selected items.</p>
+    <button type="button" onclick="displayDropdown()">Try it</button>
+    <p></p>
+    <p> You selected: </p>
+    <p id="demo1"></p>
+    <p id="demo2"></p>
 
     <!----------------------------------------------->
     <!-- JS: Boostrap, Firebase, API related    -->
@@ -86,6 +119,7 @@
             document.getElementById("myform").addEventListener("submit", function (e) {
                 e.preventDefault();
                 var data = document.getElementById("weight").value //get weight from DOM
+                document.getElementById("demo0").innerHTML = data;
                 console.log(data);
                 firebase.auth().onAuthStateChanged(function (user) {
                     db.collection("users").doc(user.uid).update({
@@ -94,6 +128,7 @@
                 })
             })
         }
+        saveWeight();
 
         //-------------------------------------------------------------------------
         // Scenario: I have a users collection.  Each document has a experience field.
@@ -234,7 +269,7 @@
         // Instead, we read, increment, and write again. 
         //---------------------------------------------------------------- 
         function writeMapOld() {
-            var randomCalories=123;
+            var randomCalories = 123;
             firebase.auth().onAuthStateChanged(function (user) {
                 let increment = firebase.firestore.FieldValue.increment(randomCalories);
                 let dbref = db.collection("users/").doc(user.uid);
@@ -251,26 +286,40 @@
                 })
             })
         }
+
         function writeMap() {
-            var inc=123;
+            var inc = 123;
             firebase.auth().onAuthStateChanged(function (user) {
                 db.collection("users/").doc(user.uid)
-                .get()              //read from database
-                .then(function(snap){
-                    var obj = snap.data();   //increment fields
-                    obj.Total.benchpress = obj.Total.benchpress + inc;
-                    obj.Total.calories = obj.Total.calories + inc;
-                    obj.Total.deadlift = obj.Total.deadlift + inc;
-                    saveObj(obj);  //write to database
-                })
+                    .get() //read from database
+                    .then(function (snap) {
+                        var obj = snap.data(); //increment fields
+                        obj.Total.benchpress = obj.Total.benchpress + inc;
+                        obj.Total.calories = obj.Total.calories + inc;
+                        obj.Total.deadlift = obj.Total.deadlift + inc;
+                        saveObj(obj); //write to database
+                    })
             })
         }
-        function saveObj(obj){
+
+        function saveObj(obj) {
             firebase.auth().onAuthStateChanged(function (user) {
                 db.collection("users/").doc(user.uid).update(obj);
             })
         }
         //writeMap();
+
+        //------------------------------------------------------------
+        // Scenario: I have a dropdown menu for 2 items
+        // Task: When I press submit/save, I want to see my choices displayed
+        //------------------------------------------------------------
+        function displayDropdown() {
+            var x = document.getElementById("fruits").value;
+            document.getElementById("demo1").innerHTML = x;
+            var y = document.getElementById("vegies").value;
+            document.getElementById("demo2").innerHTML = y;
+        }
+    </script>
     </script>
 
 </body>
