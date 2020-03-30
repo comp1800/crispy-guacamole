@@ -252,7 +252,7 @@
         //       (by name, or by ingredient, let's say)
         //       https://firebase.google.com/docs/firestore/query-data/queries 
         //--------------------------------------------------------------------------
-        function writeIngredients(){
+        function writeRecipe(){
             var item1 = "macaroni";
             var item2 = "cheese";
             var obj={};
@@ -260,6 +260,7 @@
             obj[item2] = true;
             obj["name"] = "Macaroni and Cheese"
             obj["description"] = "Classic comfort food"
+            obj["level"] = "easy"
             db.collection("recipes").add(obj);
         }
         function grabRecipeByName(name) {
