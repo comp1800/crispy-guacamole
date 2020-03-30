@@ -105,9 +105,9 @@
         //-------------------------------------------------------
         function sayHello() {
             firebase.auth().onAuthStateChanged(function (user) {
-                name = user.displayName;     //get first and last name
+                name = user.displayName; //get first and last name
                 console.log(name);
-                first = name.split(" ")[0];  //get first name only
+                first = name.split(" ")[0]; //get first name only
                 console.log(first);
                 document.getElementById("name").innerHTML = first + "\'s"; //Elmo's
             })
@@ -132,6 +132,17 @@
             })
         }
         saveWeight();
+
+        //------------------------------------------------------------
+        // Scenario: I have a dropdown menu for 2 items
+        // Task: When I press button, I want to see my choices displayed
+        //------------------------------------------------------------
+        function displayDropdown() {    //event handler only
+            var x = document.getElementById("fruits").value;
+            document.getElementById("demo1").innerHTML = x;
+            var y = document.getElementById("vegies").value;
+            document.getElementById("demo2").innerHTML = y;
+        }
 
         //-------------------------------------------------------------------------
         // Scenario: I have a users collection.  Each document has a experience field.
@@ -163,7 +174,6 @@
                     });
             });
         }
-
         function findByCode(postalcode) {
             var dmin = 0;
             if (postalcode == 123) { //let's hardcode location of 123
@@ -237,10 +247,24 @@
 
         //--------------------------------------------------------------------------
         // Scenario:  we have a collection of recipes (with a name, and some ugly ID
-        // Task:  we want to get one specific recipe, or a list of recipes
+        // Task: We want to write the recipes with the ingredient as the "key"
+        j//      We want to get one specific recipe, or a list of recipes
         //       (by name, or by ingredient, let's say)
         //       https://firebase.google.com/docs/firestore/query-data/queries 
         //--------------------------------------------------------------------------
+        function writeIngredients(){
+            var item1 = "chicken";
+            var item2 = "fish";
+            var obj={};
+            obj[item1] = true;
+            obj[item2] = true;
+            
+
+            //obj[item1] = true;
+            //obj[item2] = true;
+
+            db.collection("recipes").add(obj);
+        }
         function grabRecipeByName(name) {
             db.collection("recipes").where("name", "==", name)
                 .get() //gets ALL the recipes that match variable name
@@ -251,7 +275,6 @@
                     })
                 })
         }
-
         function grabRecipeByIngredient(ingredient) {
             db.collection("recipes").where(ingredient, "==", true)
                 .get() //gets ALL the recipes that match variable ingredient
@@ -289,7 +312,6 @@
                 })
             })
         }
-
         function writeMap() {
             var inc = 123;
             firebase.auth().onAuthStateChanged(function (user) {
@@ -304,7 +326,6 @@
                     })
             })
         }
-
         function saveObj(obj) {
             firebase.auth().onAuthStateChanged(function (user) {
                 db.collection("users/").doc(user.uid).update(obj);
@@ -312,16 +333,7 @@
         }
         //writeMap();
 
-        //------------------------------------------------------------
-        // Scenario: I have a dropdown menu for 2 items
-        // Task: When I press submit/save, I want to see my choices displayed
-        //------------------------------------------------------------
-        function displayDropdown() {
-            var x = document.getElementById("fruits").value;
-            document.getElementById("demo1").innerHTML = x;
-            var y = document.getElementById("vegies").value;
-            document.getElementById("demo2").innerHTML = y;
-        }
+
     </script>
     </script>
 
