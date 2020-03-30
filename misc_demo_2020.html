@@ -247,22 +247,19 @@
 
         //--------------------------------------------------------------------------
         // Scenario:  we have a collection of recipes (with a name, and some ugly ID
-        // Task: We want to write the recipes with the ingredient as the "key"
-        j//      We want to get one specific recipe, or a list of recipes
+        // Task: We want to write the recipes with the ingredient as the "key", value "true"
+        //       We want to get one specific recipe, or a list of recipes
         //       (by name, or by ingredient, let's say)
         //       https://firebase.google.com/docs/firestore/query-data/queries 
         //--------------------------------------------------------------------------
         function writeIngredients(){
-            var item1 = "chicken";
-            var item2 = "fish";
+            var item1 = "macaroni";
+            var item2 = "cheese";
             var obj={};
             obj[item1] = true;
             obj[item2] = true;
-            
-
-            //obj[item1] = true;
-            //obj[item2] = true;
-
+            obj["name"] = "Macaroni and Cheese"
+            obj["description"] = "Classic comfort food"
             db.collection("recipes").add(obj);
         }
         function grabRecipeByName(name) {
