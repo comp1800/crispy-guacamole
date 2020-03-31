@@ -70,6 +70,14 @@
     <p id="demo1"></p>
     <p id="demo2"></p>
 
+
+    <!-- Cards 4 columns-->
+    <div class=jumbotron>
+        <div id = "cards" class="row padding">
+        </div>
+    </div>
+
+
     <!----------------------------------------------->
     <!-- JS: Boostrap, Firebase, API related    -->
     <!----------------------------------------------->
@@ -265,13 +273,23 @@
             obj["level"] = "easy"
             db.collection("recipes").add(obj);
 
-            var item1 = "fish"; //get from user
-            var item2 = "potato"; //get from user
+            var item1 = "tomato"; //get from user
+            var item2 = "cheese"; //get from user
             var obj = {};
             obj[item1] = true;
             obj[item2] = true;
-            obj["name"] = "Fish and Chips"
-            obj["description"] = "British deep fried grub"
+            obj["name"] = "Classic Cheese Pizza"
+            obj["description"] = "Can't go wrong with pizza"
+            obj["level"] = "medium"
+            db.collection("recipes").add(obj);
+
+            var item1 = "crackers"; //get from user
+            var item2 = "cheese"; //get from user
+            var obj = {};
+            obj[item1] = true;
+            obj[item2] = true;
+            obj["name"] = "Cheese platter"
+            obj["description"] = "Easy for school snack."
             obj["level"] = "medium"
             db.collection("recipes").add(obj);
         }
@@ -286,22 +304,21 @@
                     })
                 })
         }
+
         function grabRecipeByIngredient(ingredient) {
-            db.collection("recipes").where(ingredient, "==", true)
+            db.collection("recipes")
+                .where(ingredient, "==", true)
+                .limit(4)   //only show 4 max, for this release
                 .get() //gets ALL the recipes that match variable ingredient
                 .then(function (snap) {
-                    snap.forEach(function (doc) {
-                        console.log(doc
-                            .data()); //shows the whole recipe object, inlcuding all key value pairs
-                        displayRecipe(doc.data(),doc.id);  //pass along the unique ID of the document
-                        })
+                    displayCards(snap);
                 })
         }
         //grabRecipeByName("Macaroni and Cheese");
         grabRecipeByIngredient("cheese");
-        grabRecipeByIngredient("fish");
+        //grabRecipeByIngredient("fish");
 
-        function displayRecipe(recipe, id) {   //input json object, and a unique ID for the recipe
+        function displayRecipe(recipe, id) { //input json object, and a unique ID for the recipe
             var n = recipe.name;
             console.log(n); //should print out name
             var para = document.createElement("div");
@@ -309,10 +326,55 @@
             document.body.appendChild(para);
             var node = document.createTextNode(n); //name is from firestore
             para.appendChild(node);
-            $("#" + id).click(function () { //attach listener to each city
-                alert("in handler!" + id + " was clicked!");
-                window.location.href="recipe.html?" + id;  //pass along ID of the recipe doc.
+            $("#" + id).click(function () { //attach listener to each recipe
+                alert("in handler!" + id + " was clicked!"); //for debug
+                window.location.href = "recipe.html?" + id; //pass along ID of the recipe doc.
             })
+        }
+        // let's say we have 4 columns
+        function displayCards(CardObjects, numCards) {
+            CardObjects.forEach(function (doc) {
+                    createOneCard(doc);
+                })
+        }
+        function createOneCard(c) { //pass in one document object
+            var coldiv = document.createElement("div");
+            coldiv.setAttribute("class", "col-md-3");
+
+            var carddiv = document.createElement("div");
+            carddiv.setAttribute("class", "card");
+
+            var img = document.createElement("img");
+            img.setAttribute("class", "card-img-top");
+            img.setAttribute("src", "food.jpg");
+
+            var cardbodydiv = document.createElement("div");
+            cardbodydiv.setAttribute("class", "card-body");
+
+            var h4 = document.createElement("h4");
+            h4.setAttribute("class", "card-title");
+            var text = document.createTextNode(c.data().name);
+            h4.appendChild(text);
+
+            var p = document.createElement("p");
+            p.setAttribute("class", "card-text");
+            var text = document.createTextNode(c.data().description);
+            p.appendChild(text);
+
+            var a = document.createElement("a");
+            a.setAttribute("href", c.data().id + ".html");
+            a.setAttribute("class", "btn btn-outline-secondary");
+            var text = document.createTextNode("View Recipe");
+            a.appendChild(text);
+
+            cardbodydiv.appendChild(h4);
+            cardbodydiv.appendChild(p);
+            cardbodydiv.appendChild(a);
+            img.appendChild(cardbodydiv);
+            carddiv.appendChild(img);
+            carddiv.appendChild(cardbodydiv);
+            coldiv.appendChild(carddiv);
+            document.getElementById("cards").appendChild(coldiv);
         }
 
         //-----------------------------------------------------------------
@@ -361,6 +423,59 @@
             })
         }
         //writeMap();
+
+
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        function writeAnimal() {
+            var animalobj = {
+                name: "bear",
+                colour: "brown"
+            }
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users").doc(user.uid)
+                    .collection("animals")
+                    .add(animalobj); //ugly ID auto generated for the animal
+            })
+            var animalobj = {
+                name: "cow",
+                colour: "brown"
+            }
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users").doc(user.uid)
+                    .collection("animals")
+                    .add(animalobj); //ugly ID auto generated for the animal
+            })
+        }
+
+        function displayAnimals() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users").doc(user.uid)
+                    .collection("animals")
+                    .get()
+                    .then(function (snap) {
+                        snap.forEach(function (doc) {
+                            cosole.log(doc.data().name); //prints out name of the animal
+                        })
+                    })
+            })
+        }
+
+        function displayAnimalByName(name) {
+            firebase.auth().onAuthStateChanged(function (user) {
+                db.collection("users").doc(user.uid)
+                    .collection("animals")
+                    .where("name", "==", name)
+                    .get()
+                    .then(function (snap) {
+                        snap.forEach(function (doc) {
+                            console.log(doc.data().name); //prints out name of the animal
+                        })
+                    })
+            })
+        }
+        //displayAnimals();
+        //displayAnimalByName("bear");
     </script>
     </script>
 
