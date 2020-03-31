@@ -73,6 +73,7 @@
     <!----------------------------------------------->
     <!-- JS: Boostrap, Firebase, API related    -->
     <!----------------------------------------------->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
     </script>
@@ -137,7 +138,7 @@
         // Scenario: I have a dropdown menu for 2 items
         // Task: When I press button, I want to see my choices displayed
         //------------------------------------------------------------
-        function displayDropdown() {    //event handler only
+        function displayDropdown() { //event handler only
             var x = document.getElementById("fruits").value;
             document.getElementById("demo1").innerHTML = x;
             var y = document.getElementById("vegies").value;
@@ -174,6 +175,7 @@
                     });
             });
         }
+
         function findByCode(postalcode) {
             var dmin = 0;
             if (postalcode == 123) { //let's hardcode location of 123
@@ -252,17 +254,28 @@
         //       (by name, or by ingredient, let's say)
         //       https://firebase.google.com/docs/firestore/query-data/queries 
         //--------------------------------------------------------------------------
-        function writeRecipe(){
-            var item1 = "macaroni";
-            var item2 = "cheese";
-            var obj={};
+        function writeRecipe() {
+            var item1 = "macaroni"; //get from user
+            var item2 = "cheese"; //get from user
+            var obj = {};
             obj[item1] = true;
             obj[item2] = true;
             obj["name"] = "Macaroni and Cheese"
             obj["description"] = "Classic comfort food"
             obj["level"] = "easy"
             db.collection("recipes").add(obj);
+
+            var item1 = "fish"; //get from user
+            var item2 = "potato"; //get from user
+            var obj = {};
+            obj[item1] = true;
+            obj[item2] = true;
+            obj["name"] = "Fish and Chips"
+            obj["description"] = "British deep fried grub"
+            obj["level"] = "medium"
+            db.collection("recipes").add(obj);
         }
+
         function grabRecipeByName(name) {
             db.collection("recipes").where("name", "==", name)
                 .get() //gets ALL the recipes that match variable name
@@ -280,11 +293,26 @@
                     snap.forEach(function (doc) {
                         console.log(doc
                             .data()); //shows the whole recipe object, inlcuding all key value pairs
-                    })
+                        displayRecipe(doc.data(),doc.id);  //pass along the unique ID of the document
+                        })
                 })
         }
-        //grabRecipeByName("mac-and-cheese");
-        //grabRecipeByIngredient("chicken");
+        //grabRecipeByName("Macaroni and Cheese");
+        grabRecipeByIngredient("cheese");
+
+        function displayRecipe(recipe, id) {   //input json object, and a unique ID for the recipe
+            var n = recipe.name;
+            console.log(n); //should print out city
+            var para = document.createElement("div");
+            para.setAttribute("id", id);
+            document.body.appendChild(para);
+            var node = document.createTextNode(n); //name is from firestore
+            para.appendChild(node);
+            $("#" + id).click(function () { //attach listener to each city
+                alert("in handler!" + id + " was clicked!");
+                window.location.href="recipe.html?" + id;  //pass along ID of the recipe doc.
+            })
+        }
 
         //-----------------------------------------------------------------
         // Scenario: I have a collection of users, with Totals for different exercises
@@ -310,6 +338,7 @@
                 })
             })
         }
+
         function writeMap() {
             var inc = 123;
             firebase.auth().onAuthStateChanged(function (user) {
@@ -324,14 +353,13 @@
                     })
             })
         }
+
         function saveObj(obj) {
             firebase.auth().onAuthStateChanged(function (user) {
                 db.collection("users/").doc(user.uid).update(obj);
             })
         }
         //writeMap();
-
-
     </script>
     </script>
 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> BCIT COMP1800 Template </title>
+    <!----------------------------------------------->
+    <!--  Meta tag for rendering on mobile devices -->
+    <!----------------------------------------------->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!------------------------>
+    <!-- Bootstrap CSS file -->
+    <!------------------------>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!------------------------>
+    <!-- Your own CSS files -->
+    <!------------------------>
+
+</head>
+
+<body>
+    <!------------------->
+    <!--  HTML Section -->
+    <!------------------->
+
+    <h1> Welcome to the Recipes page </h1>
+    <p id="recipe"> </p>
+
+
+      <!----------------------------------------------->
+    <!-- JS: Boostrap, Firebase, API related    -->
+    <!----------------------------------------------->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.9.2/firebase-firestore.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <script src="firebase_api_carly.js"> </script>
+
+    <!----------------------------------------------->
+    <!-- JS files: Your own JavaScripts go here    -->
+    <!----------------------------------------------->
+
+    <script>
+
+        //---------------------------------------------------
+        // Scenario: I have been redirected to this page
+        //           the URL contains the ID of a recipe to display
+        // Task:  Get the recipe from database using ID provided
+        //        Display information about this recipe
+        //----------------------------------------------------
+       function displayRecipe() {
+            var queryString = decodeURIComponent(window.location.search);
+            var queries = queryString.split("?");
+            var id = queries[1];  //gets what is after the "?"
+            
+            // get that recipe from database
+            db.collection("recipes").doc(id)
+            .get()
+            .then(function(snap){
+                var n = snap.data().name;
+                console.log(n);
+                document.getElementById("recipe").innerText = n;
+            })
+       }
+       displayRecipe();
+
+    </script>
+
+</body>
+
+</html>
