@@ -74,6 +74,7 @@
     <!-- Cards 4 columns-->
     <div class=jumbotron>
         <div id = "cards" class="row padding">
+            <!--- this is where new cards will be inserted -->
         </div>
     </div>
 
@@ -256,7 +257,7 @@
         //addTask();
 
         //--------------------------------------------------------------------------
-        // Scenario:  we have a collection of recipes (with a name, and some ugly ID
+        // Scenario:  we have a collection of recipes (with a name, and some ugly ID)
         // Task: We want to write the recipes with the ingredient as the "key", value "true"
         //       We want to get one specific recipe, or a list of recipes
         //       (by name, or by ingredient, let's say)
@@ -271,13 +272,13 @@
             obj["name"] = "Macaroni and Cheese"
             obj["description"] = "Classic comfort food"
             obj["level"] = "easy"
-            db.collection("recipes").add(obj);
+            db.collection("recipes").add(obj);  //ugly ID
 
             var item1 = "tomato"; //get from user
             var item2 = "cheese"; //get from user
             var obj = {};
-            obj[item1] = true;
-            obj[item2] = true;
+            obj[item1] = true;    // tomato: true
+            obj[item2] = true;    // cheese: true
             obj["name"] = "Classic Cheese Pizza"
             obj["description"] = "Can't go wrong with pizza"
             obj["level"] = "medium"
@@ -291,7 +292,7 @@
             obj["name"] = "Cheese platter"
             obj["description"] = "Easy for school snack."
             obj["level"] = "medium"
-            db.collection("recipes").add(obj);
+            db.collection("recipes").add(obj);    //can update later with new key/value distance
         }
 
         function grabRecipeByName(name) {
@@ -307,8 +308,8 @@
 
         function grabRecipeByIngredient(ingredient) {
             db.collection("recipes")
-                .where(ingredient, "==", true)
-                .limit(4)   //only show 4 max, for this release
+                .where(ingredient, "==", true)  //can also use "orderby" (see firestore read doc)
+                .limit(4)   //only show 4 max, so cards display 4 in a row
                 .get() //gets ALL the recipes that match variable ingredient
                 .then(function (snap) {
                     displayCards(snap);
@@ -332,9 +333,9 @@
             })
         }
         // let's say we have 4 columns
-        function displayCards(CardObjects, numCards) {
-            CardObjects.forEach(function (doc) {
-                    createOneCard(doc);
+        function displayCards(CardObjects) {       //takes in collection
+            CardObjects.forEach(function (doc) {   //cycle thru collection
+                    createOneCard(doc);            //create card for one recipe/gym
                 })
         }
         function createOneCard(c) { //pass in one document object
@@ -367,6 +368,7 @@
             var text = document.createTextNode("View Recipe");
             a.appendChild(text);
 
+            // stitch it all together 
             cardbodydiv.appendChild(h4);
             cardbodydiv.appendChild(p);
             cardbodydiv.appendChild(a);
@@ -374,7 +376,7 @@
             carddiv.appendChild(img);
             carddiv.appendChild(cardbodydiv);
             coldiv.appendChild(carddiv);
-            document.getElementById("cards").appendChild(coldiv);
+            document.getElementById("cards").appendChild(coldiv); //stick it in the div
         }
 
         //-----------------------------------------------------------------
