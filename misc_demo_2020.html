@@ -316,7 +316,7 @@
                 })
         }
         //grabRecipeByName("Macaroni and Cheese");
-        grabRecipeByIngredient("cheese");
+        //grabRecipeByIngredient("cheese");
         //grabRecipeByIngredient("fish");
 
         function displayRecipe(recipe, id) { //input json object, and a unique ID for the recipe
@@ -338,7 +338,7 @@
                     createOneCard(doc);            //create card for one recipe/gym
                 })
         }
-        function createOneCard(c) { //pass in one document object
+        function createOneCard(c) { //pass in one document object, name of doc object kdjfa
             var coldiv = document.createElement("div");
             coldiv.setAttribute("class", "col-md-3");
 
@@ -363,7 +363,7 @@
             p.appendChild(text);
 
             var a = document.createElement("a");
-            a.setAttribute("href", c.data().id + ".html");
+            a.setAttribute("href", c.data().id + ".html?");
             a.setAttribute("class", "btn btn-outline-secondary");
             var text = document.createTextNode("View Recipe");
             a.appendChild(text);
@@ -478,6 +478,92 @@
         }
         //displayAnimals();
         //displayAnimalByName("bear");
+
+
+        //-----------------------------------------------------------
+        //   /item/lkdafj3153/   "name": "honey"
+        //                       "canada": 45
+        //-----------------------------------------------------------
+        function writeProducts() {
+            var item = document.getElementById("items").value 
+            //var item = "honey"; //get from user 
+            var Cprice = 25;     //get canada price
+            var Fprice = 325;    //get from user
+            var Fcountry = "Japan";  //foreign country
+            var obj = {};
+            obj["name"] = item;           // "name": "honey"
+            obj["cprice"] = Cprice;
+            obj["Fprice"] = Fprice;
+            obj["Fcountry"] = Fcountry;
+            db.collection("items").add(obj);  //ugly ID
+        }
+        //writeProducts();
+
+        //--------------------------------------------------------
+        // Scenario:  I have a collection of items
+        // Task:  cycle through each one and display a card
+        //        each card has a "compare" button that takes you to a results page
+        //---------------------------------------------------------
+        function displayItems(){
+               db.collection("items")
+               .limit(4)
+               .get()
+               .then(function(snap){
+                    snap.forEach(function(doc){
+                        createItemCard(doc.data(), doc.id);
+                    })
+               })
+        }
+        function createItemCard(c, id){   //document "object"
+            console.log(id);
+            var name = c.name;
+            var cprice = c.cprice;
+            var fprice = c.fprice;
+            var fcountry = c.fcountry;
+            
+            var coldiv = document.createElement("div");
+            coldiv.setAttribute("class", "col-md-3");
+
+            var carddiv = document.createElement("div");
+            carddiv.setAttribute("class", "card");
+
+            var img = document.createElement("img");
+            img.setAttribute("class", "card-img-top");
+            img.setAttribute("src", name+".jpg");          //honey picture
+
+            var cardbodydiv = document.createElement("div");
+            cardbodydiv.setAttribute("class", "card-body");
+
+            var h4 = document.createElement("h4");
+            h4.setAttribute("class", "card-title");
+            var text = document.createTextNode(name);     //honey
+            h4.appendChild(text);
+
+            var p = document.createElement("p");
+            p.setAttribute("class", "card-text");
+            var text = document.createTextNode(fcountry); //fcountry
+            p.appendChild(text);
+
+            var a = document.createElement("a");
+            a.setAttribute("href", "results.html?" + id);   //  results.html?honey
+            a.setAttribute("class", "btn btn-outline-secondary");
+            var text = document.createTextNode("Compare");
+            a.appendChild(text);
+
+            // stitch it all together 
+            cardbodydiv.appendChild(h4);
+            cardbodydiv.appendChild(p);
+            cardbodydiv.appendChild(a);
+            img.appendChild(cardbodydiv);
+            carddiv.appendChild(img);
+            carddiv.appendChild(cardbodydiv);
+            coldiv.appendChild(carddiv);
+            document.getElementById("cards").appendChild(coldiv); //stick it in the div
+        }
+        displayItems();
+
+        
+
     </script>
     </script>
 
